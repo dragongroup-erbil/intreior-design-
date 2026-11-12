@@ -862,7 +862,7 @@ async function buildShop(){
 
 async function build(){
   try{await Promise.all(['700 80px Amiri','80px Marcellus','700 80px "Noto Kufi Arabic"','400 60px "Noto Naskh Arabic"'].map(f=>document.fonts.load(f)));}catch(e){}
-  if(window.__SHOP){await buildShop();return;}
+  if(window.__SHOP){await buildShop();scene.traverse(o=>{const g=o.geometry;if(o.isMesh&&g&&g.parameters&&g.parameters.width>30)o.visible=false;});return;}
 
   // floors
   if(STYLE==='granada'){M.floor.map=tx(andalusFloorC(),true,[1,1]);const _sofa=sofa;sofa=function(len,o={}){return len<=1.0?andalusChair(o):_sofa(len,o);};}
@@ -1132,7 +1132,7 @@ function roundRug(){return textTex(1024,1024,(g,W)=>{const c=W/2;g.fillStyle='#c
 // ---------- cameras ----------
 const fovOf=mm=>2*Math.atan(12/mm)*180/Math.PI;
 const SHOTS=[
-  {id:'axo',ku:'ئێکسۆنۆمێتری',en:'Axonometric cutaway',mm:24,p:[13,17,15],t:[0,0.6,0],what:'',cut:true},
+  {id:'axo',ku:'ئێکسۆنۆمێتری',en:'Axonometric cutaway',mm:30,p:[13,17,15],t:[0,0.4,0],what:'',cut:true},
   {id:'top',ku:'پلان لە سەرەوە',en:'Plan from above',mm:28,p:[0.01,26,0.6],t:[0,0,0],what:'',cut:true},
   {id:'s1',ku:'بینینی گشتی',en:'Overall',mm:16,p:[3.9,1.7,5.4],t:[-1.6,1.55,-4.2],what:''},
   {id:'s2',ku:'دیواری جلەکان',en:'Clothing niches',mm:20,p:[2.6,1.7,5.0],t:[-5,1.5,-0.6],what:''},
