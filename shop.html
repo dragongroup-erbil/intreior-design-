@@ -824,15 +824,35 @@ async function buildShop(){
     // waiting: 2 single chairs + arched mirror on partition
     for(const z of [-2.4,-3.4]){const c=andalusChair({fab:M.fabricRed});c.position.set(2.35,0,z);c.rotation.y=Math.PI/2;scene.add(c);}
     const pf=pouf(0.26,M.fabricBronze);pf.position.set(2.0,0,-4.3);scene.add(pf);}
-  // ---- display island (octagon) + side tables
+  // ---- MODERN centre: stepped round plinth + suspended brass ring rail + LED halo + glass nesting tables
   {const g=new THREE.Group();scene.add(g);
-    add(g,mesh(new THREE.CylinderGeometry(0.85,0.85,0.08,8),M.macael),0,0.86,0);add(g,mesh(new THREE.CylinderGeometry(0.78,0.82,0.82,8),M.walnut),0,0.41,0);
-    const pn=mesh(new THREE.CylinderGeometry(0.79,0.83,0.6,8,1,true),new THREE.MeshStandardMaterial({map:gTex('laceria',4,1),roughness:0.6}));pn.position.y=0.42;g.add(pn);
-    add(g,mesh(new THREE.CylinderGeometry(0.87,0.87,0.02,8),M.brass),0,0.82,0);
-    for(let k=0;k<8;k++){const a=k/8*Math.PI*2+Math.PI/8;for(let s=0;s<3;s++)add(g,box(0.3,0.05,0.24,new THREE.MeshStandardMaterial({color:GCOL[(k+s)%8],roughness:0.9})),Math.cos(a)*0.55,0.925+s*0.052,Math.sin(a)*0.55).rotation.y=-a;}
-    const vs=vase(0.7);vs.position.set(0,0.1,0);g.add(vs);
-    for(const sx of [-2.4,2.4]){const t=blockTable(1.2,0.8,0.78);t.position.set(sx,0,3.0);scene.add(t);
-      for(let s=0;s<4;s++)add(scene,box(0.32,0.05,0.26,new THREE.MeshStandardMaterial({color:GCOL[(s+(sx>0?3:0))%8],roughness:0.9})),sx-0.25+(s%2)*0.5,0.81+Math.floor(s/2)*0.052,3.0);}
+    const terr=new THREE.MeshStandardMaterial({color:0xefe9df,roughness:0.35});
+    add(g,mesh(new THREE.CylinderGeometry(1.15,1.15,0.14,64),terr),0,0.07,0);
+    add(g,mesh(new THREE.CylinderGeometry(1.16,1.16,0.015,64),M.brass),0,0.145,0);
+    add(g,mesh(new THREE.CylinderGeometry(0.62,0.62,0.48,64),terr),0.25,0.38,-0.15);
+    add(g,mesh(new THREE.CylinderGeometry(0.63,0.63,0.015,64),M.brass),0.25,0.62,-0.15);
+    add(g,mesh(new THREE.CylinderGeometry(0.4,0.4,0.26,48),M.walnut),-0.55,0.27,0.35);
+    for(let s=0;s<4;s++)add(g,box(0.34,0.05,0.27,new THREE.MeshStandardMaterial({color:GCOL[s%8],roughness:0.9})),0.15+(s%2)*0.25,0.655+Math.floor(s/2)*0.052,-0.1);
+    for(let s=0;s<3;s++)add(g,box(0.3,0.05,0.24,new THREE.MeshStandardMaterial({color:GCOL[(s+4)%8],roughness:0.9})),-0.55,0.425+s*0.052,0.35);
+    const vs=vase(0.55);vs.position.set(0.45,0.63,-0.35);g.add(vs);
+    // suspended ring rail
+    const R=1.0,yR=1.78;const ring=mesh(new THREE.TorusGeometry(R,0.016,10,96),M.brass);ring.rotation.x=Math.PI/2;ring.position.y=yR;g.add(ring);
+    for(let k=0;k<3;k++){const a=k/3*Math.PI*2+0.3;const rod=mesh(new THREE.CylinderGeometry(0.006,0.006,HS-yR,6),M.brass);rod.position.set(Math.cos(a)*R,yR+(HS-yR)/2,Math.sin(a)*R);g.add(rod);}
+    const N=18;for(let k=0;k<N;k++){if(k%6===5)continue;const a=k/N*Math.PI*2;const gm=new THREE.Group();gm.position.set(Math.cos(a)*R,0,Math.sin(a)*R);gm.rotation.y=-a;g.add(gm);
+      const c=new THREE.MeshStandardMaterial({color:GCOL[k%8],roughness:0.9});
+      const body=box(0.05,0.82,0.44,c);body.position.y=yR-0.47;gm.add(body);
+      const sh=box(0.05,0.06,0.36,c);sh.position.y=yR-0.04;gm.add(sh);
+      const hk=mesh(new THREE.TorusGeometry(0.03,0.004,4,12,Math.PI),M.brass);hk.position.y=yR+0.01;gm.add(hk);}
+    // modern LED halo around the chandelier
+    const halo=mesh(new THREE.TorusGeometry(1.35,0.025,8,128),new THREE.MeshStandardMaterial({color:0xfff2dc,emissive:0xffe2b8,emissiveIntensity:2.2}));halo.rotation.x=Math.PI/2;halo.position.y=HS-0.95;g.add(halo);
+    for(let k=0;k<4;k++){const a=k/4*Math.PI*2+Math.PI/4;const w=mesh(new THREE.CylinderGeometry(0.003,0.003,0.95,4),M.brass);w.position.set(Math.cos(a)*1.35,HS-0.475,Math.sin(a)*1.35);g.add(w);}
+    // glass + brass nesting tables (front)
+    const glass=new THREE.MeshStandardMaterial({color:0xcfe0de,roughness:0.05,metalness:0.1,transparent:true,opacity:0.45});
+    for(const sx of [-2.4,2.4]){for(const [r,h,dx,dz] of [[0.45,0.74,0,0],[0.3,0.48,(sx<0?0.55:-0.55),0.4]]){const t=new THREE.Group();t.position.set(sx+dx,0,3.0+dz);scene.add(t);
+        add(t,mesh(new THREE.CylinderGeometry(r,r,0.02,48),glass),0,h,0);add(t,mesh(new THREE.TorusGeometry(r,0.01,6,48),M.brass),0,h-0.012,0).rotation.x=Math.PI/2;
+        for(let k=0;k<3;k++){const a=k/3*Math.PI*2;add(t,mesh(new THREE.CylinderGeometry(0.01,0.01,h,6),M.brass),Math.cos(a)*r*0.85,h/2,Math.sin(a)*r*0.85);}}
+      for(let s=0;s<3;s++)add(scene,box(0.32,0.05,0.26,new THREE.MeshStandardMaterial({color:GCOL[(s+(sx>0?3:0))%8],roughness:0.9})),sx,0.76+s*0.052,3.0);
+      const bg=box(0.3,0.24,0.12,new THREE.MeshStandardMaterial({color:sx<0?0x1c1c1c:0xb88a5a,roughness:0.5}));add(scene,bg,sx+(sx<0?0.55:-0.55),0.61,3.4);}
     for(const [x,z] of [[-4.3,5.3],[4.3,5.3],[-1.9,-5.4]]){const p=plant(2.0);p.position.set(x,0,z);p.scale.setScalar(0.85);scene.add(p);}}
   // ---- CEDAR CEILING: coffered grid 8 x 8 bays (1250 x 1500), main beams 200x300, secondary 140x220, central muqarnas cupola
   {const C=ceilingGroup;const BX=1.25,BZ=1.5;const ox0=-1.25,ox1=1.25,oz0=-1.5,oz1=1.5;
