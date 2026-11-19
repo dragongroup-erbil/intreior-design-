@@ -1,97 +1,68 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Jannah Hotel Lobby</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Jost:wght@350;500&family=Amiri:wght@700&display=swap">
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Noor and Kultur</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Jost:wght@350;500;600&display=swap">
 <style>
-/* Layout: dark gallery — title, the full sheet (zoomable), then the six 3D views */
-:root{
-  --bg:#17130f; --surface:#211b15; --ink:#f3ead9; --muted:#b9ab95; --gold:#d9b06a; --line:#3a3026;
-  --f-display:"Cormorant Garamond",Georgia,serif; --f-body:"Jost",system-ui,sans-serif;
-  color-scheme:dark;
-}
-html,body{background:var(--bg);color:var(--ink)}
-body{margin:0;font-family:var(--f-body);font-weight:350;line-height:1.6}
-.wrap{max-width:1500px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-header{padding-block:36px 22px;display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
-.lbl{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold)}
-h1{font-family:var(--f-display);font-weight:500;font-size:clamp(46px,8vw,92px);line-height:.95;margin:.15em 0 .1em;color:var(--gold);font-style:italic}
-.sub{font-family:var(--f-display);font-style:italic;font-size:clamp(18px,2.4vw,24px);color:var(--ink)}
-.ar{font-family:"Amiri",serif;font-size:22px;color:#e2a58f;margin-top:4px}
-.who{text-align:right;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);line-height:1.8}
-.who b{display:block;font-family:var(--f-display);font-size:24px;letter-spacing:0;text-transform:none;color:var(--ink);font-weight:600}
-section{padding-block:28px}
-h2{font-family:var(--f-display);font-weight:500;font-size:28px;margin:0 0 4px}
-.hint{color:var(--muted);font-size:14px;margin:0 0 14px}
-.sheet{display:block;width:100%;height:auto;border:1px solid var(--line);cursor:zoom-in;background:#efe5d4}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,440px),1fr));gap:18px}
-figure{margin:0}
-figure img{width:100%;height:auto;display:block;cursor:zoom-in;border:1px solid var(--line)}
-figcaption{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);padding-top:8px}
-figcaption b{font-family:var(--f-display);font-size:20px;letter-spacing:0;color:var(--gold);font-weight:600;margin-right:8px}
-.zoom{position:fixed;inset:0;background:rgba(10,8,6,.96);z-index:20;overflow:auto;cursor:zoom-out;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)}
-.zoom img{display:block;max-width:none;width:250%;height:auto}
-.zoom.fit img{width:100%}
-.close{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));right:calc(12px + env(safe-area-inset-right,0px));z-index:21;background:#000a;color:var(--ink);border:1px solid var(--gold);padding:8px 14px;font:inherit;cursor:pointer}
-.close:focus-visible,.sheet:focus-visible,figure img:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
-footer{border-top:1px solid var(--line);padding-block:20px 40px;color:var(--muted);font-size:13px}
-</style>
-<link rel="icon" href="data:,">
-</head>
-<body>
+:root{--bg:#1e1915;--sf:#27201a;--ink:#efe6d6;--mu:#b9ab95;--gold:#d9b06a;--ln:#3d3228;color-scheme:dark}
+html,body{margin:0;background:var(--bg);color:var(--ink)}
+body{font-family:Jost,system-ui,sans-serif;font-weight:350;line-height:1.6}
+.band{height:14px;background:repeating-conic-gradient(#141414 0 25%,#ece4d4 0 50%) 0 0/7px 7px;border-bottom:1px solid var(--gold)}
+.wrap{max-width:1400px;margin:0 auto;padding:0 max(16px,env(safe-area-inset-left))}
+header{padding:40px 0 26px;border-bottom:1px solid var(--ln)}
+.lbl{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);font-weight:600}
+h1{font-family:"Cormorant Garamond",serif;font-weight:500;font-size:clamp(40px,7vw,86px);line-height:1;margin:.2em 0 .15em;letter-spacing:.06em}
+.who{color:var(--mu);font-size:14px}
+nav{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+nav a,.btn{display:inline-block;border:1px solid var(--gold);color:var(--gold);text-decoration:none;padding:9px 16px;font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+nav a:hover,.btn:hover{background:var(--gold);color:var(--bg)}
+section{padding:42px 0;border-bottom:1px solid var(--ln)}
+h2{font-family:"Cormorant Garamond",serif;font-weight:500;font-size:clamp(34px,5vw,56px);margin:0;letter-spacing:.08em}
+h2 small{display:block;font-family:"Cormorant Garamond",serif;font-style:italic;font-size:22px;color:var(--gold);letter-spacing:0}
+p.c{max-width:820px;color:#ddd3c2}
+.sheet{width:100%;display:block;border:1px solid var(--gold);cursor:zoom-in;margin:18px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,400px),1fr));gap:16px;margin-top:16px}
+figure{margin:0}figure img{width:100%;display:block;border:1px solid var(--ln);cursor:zoom-in}
+figcaption{font-size:13px;color:var(--mu);padding-top:6px}figcaption b{color:var(--gold);letter-spacing:.12em;margin-right:6px}
+.dl{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+footer{padding:26px 0 40px;color:var(--mu);font-size:13px}
+.zoom{position:fixed;inset:0;background:#0b0907f2;overflow:auto;z-index:9;cursor:zoom-out}.zoom img{display:block;width:200%;max-width:none}
+.x{position:fixed;top:12px;right:12px;z-index:10;background:#000a;color:var(--ink);border:1px solid var(--gold);padding:8px 14px;font:inherit}
+a:focus-visible,img:focus-visible,.x:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+</style></head><body><div class="band"></div><div class="wrap">
+<header><div class="lbl">Interior Design · Pre-final · 5-star hotel project</div>
+<h1>NOOR <span style="color:var(--gold)">&amp;</span> KULTUR</h1>
+<div class="who">Muayad Salih Abdullah · Salahaddin University · Architecture Department</div>
+<nav><a href="#noor">Hotel lobby · Noor</a><a href="#kultur">Jamadani shop · Kultur</a><a href="shop.html">3D model (shop)</a></nav></header>
 
-<div class="wrap">
-<header>
-  <div>
-    <div class="lbl">Interior Design · Prelim submission</div>
-    <h1>Jannah</h1>
-    <div class="sub">an Islamic vision of paradise on earth</div>
-    <div class="ar">جَنّاتٍ تجري من تحتها الأنهار</div>
-  </div>
-  <div class="who"><b>Muayad Salih Abdullah</b>Salahaddin University<br>Architecture Department<br>5-star hotel lobby — front desk + lounge</div><p style="text-align:right;margin:8px 0 0"><a href="boutique.html" style="color:var(--gold)">Jannah Boutique (shop) →</a></p>
-</header>
+<section id="noor"><div class="lbl">Sheet 01</div><h2>NOOR<small>5-star hotel lobby · front desk + lounge</small></h2>
+<p class="c">Noor means light. Guests arrive through repeated arches into a lobby of light, water and carved stucco: a marble front desk framed by a carved arch wall and a lounge under a muqarnas dome, with cedar ceilings and brass lanterns.</p>
+<img class="sheet" src="noor/sheet.jpg" alt="Noor presentation sheet" tabindex="0">
+<div class="grid">
+<figure><img src="noor/axo.jpg" alt="" tabindex="0"><figcaption><b>AXO</b>Cutaway, ceiling removed</figcaption></figure>
+<figure><img src="c2.jpg" alt="" tabindex="0"><figcaption><b>C2</b>Front desk + lounge</figcaption></figure>
+<figure><img src="c1.jpg" alt="" tabindex="0"><figcaption><b>C1</b>Front desk</figcaption></figure>
+<figure><img src="c3.jpg" alt="" tabindex="0"><figcaption><b>C3</b>Arcade gateway</figcaption></figure>
+<figure><img src="c4.jpg" alt="" tabindex="0"><figcaption><b>C4</b>Hall lounge</figcaption></figure>
+<figure><img src="c6.jpg" alt="" tabindex="0"><figcaption><b>C6</b>Muqarnas dome</figcaption></figure>
+</div></section>
 
-<section>
-  <h2>Presentation sheet · 100 × 70 cm</h2>
-  <p class="hint">Tap the sheet to open it full size and scroll around to read the drawings. <a href="Jannah_Sheet_100x70.pdf" style="color:var(--gold)">Download the PDF</a></p>
-  <img class="sheet" id="sheet" src="sheet.jpg" alt="Presentation sheet: concept, patterns, plans, elevation, section and 3D views" tabindex="0">
-</section>
-
-<section>
-  <h2>3D views · eye level +1.70 m</h2>
-  <p class="hint">Camera positions C1–C6 are marked on the general plan.</p>
-  <div class="grid">
-    <figure><img src="c1.jpg" alt="C1 front desk" tabindex="0"><figcaption><b>C1</b>Front desk</figcaption></figure>
-    <figure><img src="c2.jpg" alt="C2 front desk and lounge" tabindex="0"><figcaption><b>C2</b>Front desk + lounge</figcaption></figure>
-    <figure><img src="c3.jpg" alt="C3 arcade gateway" tabindex="0"><figcaption><b>C3</b>Arcade gateway</figcaption></figure>
-    <figure><img src="c4.jpg" alt="C4 hall lounge" tabindex="0"><figcaption><b>C4</b>Hall lounge</figcaption></figure>
-    <figure><img src="c5.jpg" alt="C5 lounge four-seat group" tabindex="0"><figcaption><b>C5</b>Lounge — four-seat group</figcaption></figure>
-    <figure><img src="c6.jpg" alt="C6 muqarnas dome" tabindex="0"><figcaption><b>C6</b>Muqarnas dome</figcaption></figure>
-  </div>
-</section>
-<section>
-  <h2>The 3D model</h2>
-  <p class="hint">The design was modelled in 3D before rendering. Model views, cut open to show the layout.</p>
-  <div class="grid">
-    <figure><img src="m1.jpg" alt="Model overview, roof removed" tabindex="0"><figcaption><b>M1</b>Overview — roof removed</figcaption></figure>
-    <figure><img src="m2.jpg" alt="Model of the front desk" tabindex="0"><figcaption><b>M2</b>Front desk</figcaption></figure>
-    <figure><img src="m3.jpg" alt="Model of the lounge" tabindex="0"><figcaption><b>M3</b>Arcade, fountain and lounge</figcaption></figure>
-  </div>
-</section>
-<footer>Muayad Salih Abdullah · Jannah — an Islamic hotel lobby · Prelim submission</footer>
+<section id="kultur"><div class="lbl">Sheet 02</div><h2>KULTUR<small>Islamic jamadani boutique · Kurdish men's culture · 10 × 12 m</small></h2>
+<p class="c">A boutique that celebrates Kurdish culture through the jamadani. One multifoil arch repeats on every wall, framing the jamadanis in warm walnut niches; a central walnut-and-marble table with gold jaali, a red-and-ivory mosaic cashier and a Persian-carpet mirror for trying the jamadani on.</p>
+<img class="sheet" src="kultur/sheet.jpg" alt="Kultur presentation sheet" tabindex="0">
+<div class="grid">
+<figure><img src="kultur/v1.jpg" alt="" tabindex="0"><figcaption><b>V1</b>Overall view</figcaption></figure>
+<figure><img src="kultur/axo.jpg" alt="" tabindex="0"><figcaption><b>AXO</b>Cutaway, ceiling removed</figcaption></figure>
+<figure><img src="kultur/v2.jpg" alt="" tabindex="0"><figcaption><b>V3</b>Central table (detail D-03)</figcaption></figure>
+<figure><img src="kultur/v3.jpg" alt="" tabindex="0"><figcaption><b>V4</b>Mosaic cashier (detail D-02)</figcaption></figure>
+<figure><img src="kultur/v4.jpg" alt="" tabindex="0"><figcaption><b>V5</b>Persian-carpet mirror (detail D-04)</figcaption></figure>
+<figure><img src="kultur/v5.jpg" alt="" tabindex="0"><figcaption><b>V6</b>Lounge</figcaption></figure>
+<figure><img src="kultur/v6.jpg" alt="" tabindex="0"><figcaption><b>V2</b>Jamadani niche wall</figcaption></figure>
 </div>
-
-<div class="zoom" id="zoom" hidden><img id="zimg" alt=""></div>
-<button class="close" id="close" type="button" hidden>Close</button>
-<script>
-const z=document.getElementById('zoom'),zi=document.getElementById('zimg'),cl=document.getElementById('close');
-function open(src,big){zi.src=src;z.classList.toggle('fit',!big);z.hidden=false;cl.hidden=false;z.scrollTo(big?{left:(zi.offsetWidth-innerWidth)/3,top:0}:{left:0,top:0});}
-function shut(){z.hidden=true;cl.hidden=true;zi.removeAttribute('src');}
-document.querySelectorAll('.sheet,figure img').forEach(el=>{const go=()=>open(el.src,el.classList.contains('sheet'));el.addEventListener('click',go);el.addEventListener('keydown',e=>{if(e.key==='Enter')go();});});
-z.addEventListener('click',shut);cl.addEventListener('click',shut);addEventListener('keydown',e=>{if(e.key==='Escape')shut();});
-</script>
-
-</body>
-</html>
+<div class="dl"><a class="btn" href="kultur/01_Plan_1-50.dxf" download>Plan DXF</a><a class="btn" href="kultur/05_Elevation_C_Left_1-50.dxf" download>Elevation C DXF</a><a class="btn" href="kultur/04_Elevation_B_Cashier_1-50.dxf" download>Elevation B DXF</a><a class="btn" href="kultur/08_Detail_Cashier_1-10.dxf" download>Cashier detail</a><a class="btn" href="kultur/09_Detail_Table_Mirror_1-10.dxf" download>Table + mirror detail</a></div>
+</section>
+<footer>Muayad Salih Abdullah · Noor &amp; Kultur · Pre-final 19.11.2026 · <a href="boutique.html" style="color:var(--gold)">earlier boutique version</a></footer>
+</div><div class="band"></div>
+<div class="zoom" id="z" hidden><img id="zi" alt=""></div><button class="x" id="x" type="button" hidden>Close</button>
+<script>const z=document.getElementById('z'),zi=document.getElementById('zi'),x=document.getElementById('x');
+function o(s){zi.src=s;z.hidden=x.hidden=false;}function c(){z.hidden=x.hidden=true;zi.removeAttribute('src');}
+document.querySelectorAll('.sheet,figure img').forEach(e=>{e.onclick=()=>o(e.src);e.onkeydown=k=>{if(k.key==='Enter')o(e.src)};});
+z.onclick=c;x.onclick=c;addEventListener('keydown',k=>{if(k.key==='Escape')c();});</script></body></html>

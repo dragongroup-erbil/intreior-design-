@@ -221,7 +221,7 @@ const M={
   stuccoDk:new THREE.MeshStandardMaterial({color:0xcdb98f,roughness:0.9}),
   voussoir:new THREE.MeshStandardMaterial({color:0xb5643c,roughness:0.8}),
   macael:new THREE.MeshStandardMaterial({map:tx(marbleTex('#f6f3ee','#9c968c',1024,1,false,40,0.14)),roughness:0.18}),
-  fabricRed:new THREE.MeshStandardMaterial({color:0x7a2a24,roughness:0.85,bumpMap:fabricTex(),bumpScale:0.4}),
+  fabricRed:new THREE.MeshStandardMaterial({color:0xa4545e,roughness:0.85,bumpMap:fabricTex(),bumpScale:0.4}),
   sCream:new THREE.MeshStandardMaterial({color:0xe9e1cf,roughness:0.6}),
   sBlack:new THREE.MeshStandardMaterial({color:0x2c2a27,roughness:0.55}),
   globe:new THREE.MeshStandardMaterial({color:0xfff6e8,emissive:0xffd49a,emissiveIntensity:1.6,roughness:0.3}),
@@ -732,7 +732,15 @@ async function buildShop(){
     list.forEach(([x,y,z,w],i)=>{o.position.set(x,y,z);o.rotation.set(0,Math.PI/2,0);o.scale.set(w*0.48,0.16,w*0.48);o.updateMatrix();im.setMatrixAt(i,o.matrix);});G.add(im);
     for(let k=0;k<3;k++)add(G,box(len,0.03,0.02,M.stucco),0,ytop-0.14-k*0.16,0.11+k*0.1);}
   // ---- Alhambra niche with clothing rail (local, faces +z, wall at z=0)
-  const GCOL=[0x8a2f26,0xefe6d4,0x1f4d4c,0xc9a061,0x5b3620,0xd9c3a0,0x2b2a28,0xb98a6a];
+  const GCOL=[0x6e1f2a,0x1f5a4a,0xc9848a,0xc9a45a,0xefe3cf,0x1f5f6a,0x8a2e48,0xd9b98a];
+  const KFC=[['#b3262c','#f4efe6'],['#1a1a1a','#f4efe6'],['#1f5a3a','#f4efe6'],['#1f2f5a','#f4efe6'],['#b3262c','#f4efe6'],['#5a3a22','#efe3cf'],['#1a1a1a','#e9e2d4'],['#8a1f2a','#f6f0e6']];const KFM={};
+  const KF=(i)=>{i=((i%8)+8)%8;if(KFM[i])return KFM[i];const [a,b]=KFC[i];const c=document.createElement('canvas');c.width=c.height=256;const x=c.getContext('2d');
+    x.fillStyle=b;x.fillRect(0,0,256,256);x.strokeStyle=a;x.lineWidth=3;
+    for(let k=-256;k<512;k+=16){x.beginPath();x.moveTo(k,0);x.lineTo(k+256,256);x.stroke();x.beginPath();x.moveTo(k,256);x.lineTo(k+256,0);x.stroke();}
+    x.fillStyle=a;for(let yy=8;yy<256;yy+=16)for(let xx=8;xx<256;xx+=16){x.fillRect(xx-2,yy-2,4,4);}
+    x.fillRect(0,0,256,18);x.fillRect(0,238,256,18);x.fillStyle=b;x.fillRect(0,6,256,4);x.fillRect(0,246,256,4);
+    const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.wrapS=t.wrapT=THREE.RepeatWrapping;KFM[i]=new THREE.MeshStandardMaterial({map:t,roughness:0.95});return KFM[i];};
+
   function clothNiche(w=1.2,hs=2.15){const g=new THREE.Group();const y0=0.18;
     add(g,box(w+0.5,y0,0.42,M.macael),0,y0/2,0.21);
     const sh=shapeOf(lobedPts(w,hs,11,0.13));
@@ -746,15 +754,16 @@ async function buildShop(){
     for(const [ww,hh,x,y] of [[w+0.72,0.07,0,top+0.15],[0.07,top-hs+0.2,-w/2-0.33,hs+(top-hs)/2+0.05],[0.07,top-hs+0.2,w/2+0.33,hs+(top-hs)/2+0.05]])add(g,box(ww,hh,0.08,M.stucco),x,y0+y,0.04);
     // shelf + folded stacks
     add(g,box(w-0.16,0.04,0.3,M.walnut),0,y0+1.92,0.16);
-    for(let j=0;j<3;j++)for(let k=0;k<3;k++)add(g,box(0.26,0.05,0.24,new THREE.MeshStandardMaterial({color:GCOL[(j*3+k)%8],roughness:0.9})),-0.32+j*0.32,y0+1.965+k*0.052,0.15);
+    for(let j=0;j<3;j++)for(let k=0;k<3;k++)add(g,box(0.26,0.05,0.24,KF((j*3+k)%8)),-0.32+j*0.32,y0+1.965+k*0.052,0.15);
     // rail + hanging garments
     add(g,cyl(0.012,0.012,w-0.1,M.brass,8),0,y0+1.68,0.2).rotation.z=Math.PI/2;
     for(const sx of [-1,1])add(g,box(0.02,0.08,0.2,M.brass),sx*(w/2-0.06),y0+1.7,0.1);
-    for(let j=0;j<7;j++){const gx=-w/2+0.16+j*((w-0.32)/6),len=0.9+((j*5)%3)*0.18,col=GCOL[(j+1)%8];
-      const gm=new THREE.MeshStandardMaterial({color:col,roughness:0.92});
+    for(let j=0;j<7;j++){const gx=-w/2+0.16+j*((w-0.32)/6),len=0.75+((j*5)%2)*0.08,col=GCOL[(j+1)%8];
+      const gm=KF(j+1);
       const gg=new THREE.Group();gg.position.set(gx,y0+1.66,0.2);
       const body=rbox(0.05,len,0.42,0.02,gm);body.position.y=-len/2-0.03;gg.add(body);
       const sh2=rbox(0.055,0.1,0.46,0.02,gm);sh2.position.y=-0.08;gg.add(sh2);
+      if(false){const em=box(0.058,0.035,0.43,M.brass);em.position.y=-len-0.01;gg.add(em);const em2=box(0.058,len*0.85,0.025,M.brass);em2.position.set(0,-len*0.5,0.205);gg.add(em2);}
       add(gg,mesh(new THREE.TorusGeometry(0.03,0.004,6,12,Math.PI),M.brass),0,0.0,0).rotation.y=Math.PI/2;g.add(gg);}
     // LED strip at arch crown
     add(g,box(w-0.3,0.02,0.02,GLOW),0,y0+hs+0.1,0.08);
@@ -769,16 +778,27 @@ async function buildShop(){
     for(const z of [3.6,2.0,0.4,-1.2]){const wl=wallLantern();wl.position.set(-z,3.15,0.05);G.add(wl);}}
   // ---- RIGHT wall (x=+5), faces -x
   {const G=new THREE.Group();G.position.set(X1,0,0);G.rotation.y=-Math.PI/2;scene.add(G);dress(G,D);
-    for(const z of [4.4,2.8,1.2,-0.4]){const n=clothNiche();n.position.set(z,0,0.01);G.add(n);}
+    for(const z of [4.4,2.8,1.2]){const n=clothNiche();n.position.set(z,0,0.01);G.add(n);}
     for(const z of [5.2,3.6,2.0,0.4,-1.2]){const c=slimCol(2.9);c.position.set(z,0,0.12);G.add(c);}
     for(const z of [3.6,2.0,0.4]){const wl=wallLantern();wl.position.set(z,3.15,0.05);G.add(wl);}}
   // ---- BACK wall (z=-6), faces +z : cashier + triple-arch backdrop
   {const G=new THREE.Group();G.position.set(0,0,Z0);scene.add(G);dress(G,W);
     const B=new THREE.Group();B.position.set(0.5,0,0);G.add(B);tripleArchWall(B,{cw:1.9,sw:1.3,ch:3.3,sh:2.8,col:0.22});
     const Dk=new THREE.Group();Dk.position.set(0.5,0,1.6);G.add(Dk);const L=3.6;
-    add(Dk,box(L-0.2,0.08,0.7,GLOW),0,0.06,0);add(Dk,rbox(L,0.98,0.82,0.03,M.macael),0,0.6,0);nasridDesk(Dk,L);
-    add(Dk,rbox(L+0.15,0.06,0.5,0.01,M.walnut),0,1.12,0.2);add(Dk,box(L+0.15,0.012,0.012,M.brass),0,1.09,0.45);
-    for(const x of [-0.9,0.9]){const l=tableLamp(1.0);l.position.set(x,1.15,0.15);Dk.add(l);}
+    // rounded mosaic counter (red/ivory keffiyeh-pixel mosaic, marble bullnose top, dark walnut plinth)
+    const stad=(l,d)=>{const r=d/2,sh=new THREE.Shape();sh.moveTo(-l/2+r,-r);sh.lineTo(l/2-r,-r);sh.absarc(l/2-r,0,r,-Math.PI/2,Math.PI/2,false);sh.lineTo(-l/2+r,r);sh.absarc(-l/2+r,0,r,Math.PI/2,Math.PI*1.5,false);return sh;};
+    const ext=(l,d,h,mat,y)=>{const g=new THREE.ExtrudeGeometry(stad(l,d),{depth:h,bevelEnabled:false,curveSegments:24});const m=mesh(g,mat);m.rotation.x=-Math.PI/2;m.position.y=y;Dk.add(m);return m;};
+    const mos=(()=>{const c=document.createElement('canvas');c.width=1024;c.height=256;const x=c.getContext('2d');const N=8;
+      for(let i=0;i<1024/N;i++)for(let j=0;j<256/N;j++){const u=i%32,v=j%32;const d=Math.abs(u-16)+Math.abs(v-16);
+        let col=(d%6<2)?'#a8323a':((d<6)?'#7a1f2a':'#efe6d8');if((u+v)%16===0)col='#c9a45a';
+        const k=(Math.random()-0.5)*18;x.fillStyle=col;x.fillRect(i*N,j*N,N-1,N-1);x.fillStyle=`rgba(${k>0?255:0},${k>0?255:0},${k>0?255:0},${Math.abs(k)/120})`;x.fillRect(i*N,j*N,N-1,N-1);}
+      x.fillStyle='#d8d0c4';for(let i=0;i<=1024;i+=N)x.fillRect(i-1,0,1,256);for(let j=0;j<=256;j+=N)x.fillRect(0,j-1,1024,1);
+      const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(0.28,1.2);return t;})();
+    ext(L-0.25,0.62,0.16,M.walnut,0);
+    ext(L,0.82,0.86,new THREE.MeshStandardMaterial({map:mos,roughness:0.35}),0.16);
+    ext(L+0.14,0.96,0.06,M.macael,1.02);
+    ext(L+0.15,0.97,0.012,M.brass,1.005);
+    for(const x of [-1.15,1.15]){const l=tableLamp(1.0);l.position.set(x,1.08,0.1);Dk.add(l);}
     const vs=vase(0.7);vs.position.set(-1.45,0.35,0.15);Dk.add(vs);
     add(Dk,box(0.5,0.32,0.03,M.screen),0.2,1.32,-0.15);
     // handbags on backdrop shelves
@@ -822,37 +842,83 @@ async function buildShop(){
     add(scene,box(1.7,HS,0.12,M.plaster),4.15,HS/2,-1.6);
     for(const z of [-3.07,-4.53])add(scene,box(1.7,2.4,0.06,M.walnut),4.15,1.2,z);
     // waiting: 2 single chairs + arched mirror on partition
-    for(const z of [-2.4,-3.4]){const c=andalusChair({fab:M.fabricRed});c.position.set(2.35,0,z);c.rotation.y=Math.PI/2;scene.add(c);}
+    
     const pf=pouf(0.26,M.fabricBronze);pf.position.set(2.0,0,-4.3);scene.add(pf);}
-  // ---- MODERN centre: stepped round plinth + suspended brass ring rail + LED halo + glass nesting tables
+  // ---- CENTRAL DISPLAY TABLE (walnut + cream marble, jaali panels) on a Persian rug, white lilies
   {const g=new THREE.Group();scene.add(g);
-    const terr=new THREE.MeshStandardMaterial({color:0xefe9df,roughness:0.35});
-    add(g,mesh(new THREE.CylinderGeometry(1.15,1.15,0.14,64),terr),0,0.07,0);
-    add(g,mesh(new THREE.CylinderGeometry(1.16,1.16,0.015,64),M.brass),0,0.145,0);
-    add(g,mesh(new THREE.CylinderGeometry(0.62,0.62,0.48,64),terr),0.25,0.38,-0.15);
-    add(g,mesh(new THREE.CylinderGeometry(0.63,0.63,0.015,64),M.brass),0.25,0.62,-0.15);
-    add(g,mesh(new THREE.CylinderGeometry(0.4,0.4,0.26,48),M.walnut),-0.55,0.27,0.35);
-    for(let s=0;s<4;s++)add(g,box(0.34,0.05,0.27,new THREE.MeshStandardMaterial({color:GCOL[s%8],roughness:0.9})),0.15+(s%2)*0.25,0.655+Math.floor(s/2)*0.052,-0.1);
-    for(let s=0;s<3;s++)add(g,box(0.3,0.05,0.24,new THREE.MeshStandardMaterial({color:GCOL[(s+4)%8],roughness:0.9})),-0.55,0.425+s*0.052,0.35);
-    const vs=vase(0.55);vs.position.set(0.45,0.63,-0.35);g.add(vs);
-    // suspended ring rail
-    const R=1.0,yR=1.78;const ring=mesh(new THREE.TorusGeometry(R,0.016,10,96),M.brass);ring.rotation.x=Math.PI/2;ring.position.y=yR;g.add(ring);
-    for(let k=0;k<3;k++){const a=k/3*Math.PI*2+0.3;const rod=mesh(new THREE.CylinderGeometry(0.006,0.006,HS-yR,6),M.brass);rod.position.set(Math.cos(a)*R,yR+(HS-yR)/2,Math.sin(a)*R);g.add(rod);}
-    const N=18;for(let k=0;k<N;k++){if(k%6===5)continue;const a=k/N*Math.PI*2;const gm=new THREE.Group();gm.position.set(Math.cos(a)*R,0,Math.sin(a)*R);gm.rotation.y=-a;g.add(gm);
-      const c=new THREE.MeshStandardMaterial({color:GCOL[k%8],roughness:0.9});
-      const body=box(0.05,0.82,0.44,c);body.position.y=yR-0.47;gm.add(body);
-      const sh=box(0.05,0.06,0.36,c);sh.position.y=yR-0.04;gm.add(sh);
-      const hk=mesh(new THREE.TorusGeometry(0.03,0.004,4,12,Math.PI),M.brass);hk.position.y=yR+0.01;gm.add(hk);}
-    // modern LED halo around the chandelier
-    const halo=mesh(new THREE.TorusGeometry(1.35,0.025,8,128),new THREE.MeshStandardMaterial({color:0xfff2dc,emissive:0xffe2b8,emissiveIntensity:2.2}));halo.rotation.x=Math.PI/2;halo.position.y=HS-0.95;g.add(halo);
-    for(let k=0;k<4;k++){const a=k/4*Math.PI*2+Math.PI/4;const w=mesh(new THREE.CylinderGeometry(0.003,0.003,0.95,4),M.brass);w.position.set(Math.cos(a)*1.35,HS-0.475,Math.sin(a)*1.35);g.add(w);}
+    const rugC=(()=>{const c=document.createElement('canvas');c.width=512;c.height=768;const x=c.getContext('2d');
+      x.fillStyle='#8a5a48';x.fillRect(0,0,512,768);x.fillStyle='#d9b98a';x.fillRect(22,22,468,724);x.fillStyle='#9a5f4c';x.fillRect(44,44,424,680);
+      x.fillStyle='#e8d3b0';x.fillRect(70,70,372,628);x.strokeStyle='#9a5f4c';x.lineWidth=6;
+      for(let i=0;i<6;i++)for(let j=0;j<9;j++){const cx=100+i*62,cy=100+j*68;x.beginPath();x.moveTo(cx,cy-24);x.lineTo(cx+20,cy);x.lineTo(cx,cy+24);x.lineTo(cx-20,cy);x.closePath();x.stroke();}
+      x.fillStyle='#b5784f';x.beginPath();x.ellipse(256,384,110,170,0,0,7);x.fill();x.fillStyle='#e8d3b0';x.beginPath();x.ellipse(256,384,80,135,0,0,7);x.fill();
+      const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;return t;})();
+    const rug=mesh(new THREE.PlaneGeometry(2.8,4.0),new THREE.MeshStandardMaterial({map:rugC,roughness:0.95}));rug.rotation.x=-Math.PI/2;rug.rotation.z=Math.PI/2;rug.position.y=0.006;g.add(rug);
+    add(g,box(2.5,0.06,1.1,M.macael),0,0.86,0);
+    add(g,box(2.4,0.62,1.0,M.walnut),0,0.52,0);add(g,box(2.5,0.08,1.1,M.walnut),0,0.06,0);add(g,box(2.3,0.12,0.9,M.walnut),0,0.16,0);
+    const jm=new THREE.MeshStandardMaterial({map:gTex('laceria',3,1),color:0xd8b070,metalness:0.4,roughness:0.4});
+    for(const z of [-0.505,0.505]){const pn=mesh(new THREE.PlaneGeometry(2.1,0.4),jm);pn.position.set(0,0.55,z);if(z<0)pn.rotation.y=Math.PI;g.add(pn);}
+    for(const x of [-1.205,1.205]){const pn=mesh(new THREE.PlaneGeometry(0.8,0.4),jm);pn.position.set(x,0.55,0);pn.rotation.y=x>0?Math.PI/2:-Math.PI/2;g.add(pn);}
+    for(const x of [-1.2,1.2])for(const z of [-0.5,0.5])add(g,box(0.08,0.7,0.08,M.walnut),x,0.48,z);
+    for(let i=0;i<4;i++)for(let j=0;j<2;j++){if(i===1&&j===0)continue;const x=-0.9+i*0.6,z=-0.25+j*0.5;
+      for(let k=0;k<4;k++)add(g,box(0.4,0.05,0.32,KF((i+j*3+k)%8)),x,0.915+k*0.052,z);
+      add(g,box(0.4,0.008,0.33,M.brass),x,0.915+4*0.052-0.02,z);}
+    const vs=vase(1.0);vs.position.set(-0.3,0.89,-0.25);g.add(vs);
+    for(let i=0;i<9;i++){const a2=i*0.7,r2=0.05+0.03*(i%3);const st=mesh(new THREE.CylinderGeometry(0.005,0.005,0.55,5),new THREE.MeshStandardMaterial({color:0x4f6b3a}));st.position.set(-0.3+Math.cos(a2)*r2*0.6,1.45,-0.25+Math.sin(a2)*r2*0.6);st.rotation.set(Math.sin(a2)*0.25,0,Math.cos(a2)*0.25);g.add(st);
+      const fl=mesh(new THREE.ConeGeometry(0.05,0.1,6,1,true),new THREE.MeshStandardMaterial({color:0xfbf8f0,roughness:0.6,side:THREE.DoubleSide}));fl.position.set(-0.3+Math.cos(a2)*(r2+0.12),1.68+0.05*(i%3),-0.25+Math.sin(a2)*(r2+0.12));fl.rotation.set(Math.PI+Math.sin(a2)*0.6,0,Math.cos(a2)*0.6);g.add(fl);}
     // glass + brass nesting tables (front)
     const glass=new THREE.MeshStandardMaterial({color:0xcfe0de,roughness:0.05,metalness:0.1,transparent:true,opacity:0.45});
-    for(const sx of [-2.4,2.4]){for(const [r,h,dx,dz] of [[0.45,0.74,0,0],[0.3,0.48,(sx<0?0.55:-0.55),0.4]]){const t=new THREE.Group();t.position.set(sx+dx,0,3.0+dz);scene.add(t);
+    for(const sx of [2.4]){for(const [r,h,dx,dz] of [[0.45,0.74,0,0],[0.3,0.48,(sx<0?0.55:-0.55),0.4]]){const t=new THREE.Group();t.position.set(sx+dx,0,3.0+dz);scene.add(t);
         add(t,mesh(new THREE.CylinderGeometry(r,r,0.02,48),glass),0,h,0);add(t,mesh(new THREE.TorusGeometry(r,0.01,6,48),M.brass),0,h-0.012,0).rotation.x=Math.PI/2;
         for(let k=0;k<3;k++){const a=k/3*Math.PI*2;add(t,mesh(new THREE.CylinderGeometry(0.01,0.01,h,6),M.brass),Math.cos(a)*r*0.85,h/2,Math.sin(a)*r*0.85);}}
-      for(let s=0;s<3;s++)add(scene,box(0.32,0.05,0.26,new THREE.MeshStandardMaterial({color:GCOL[(s+(sx>0?3:0))%8],roughness:0.9})),sx,0.76+s*0.052,3.0);
+      for(let s=0;s<3;s++)add(scene,box(0.32,0.05,0.26,KF((s+(sx>0?3:0))%8)),sx,0.76+s*0.052,3.0);
       const bg=box(0.3,0.24,0.12,new THREE.MeshStandardMaterial({color:sx<0?0x1c1c1c:0xb88a5a,roughness:0.5}));add(scene,bg,sx+(sx<0?0.55:-0.55),0.61,3.4);}
+    const modChair=()=>{const g=new THREE.Group();
+      add(g,box(0.52,0.36,0.52,M.macael),0,0.18,0);
+      const z1=sPlane(0.46,0.28,'zellige',0.23,{});for(let k=0;k<4;k++){const p2=z1.clone();const a2=k*Math.PI/2;p2.position.set(Math.sin(a2)*0.262,0.18,Math.cos(a2)*0.262);p2.rotation.y=a2;g.add(p2);}
+      add(g,box(0.54,0.015,0.54,M.brass),0,0.36,0);
+      const c=mesh(new THREE.CylinderGeometry(0.25,0.27,0.1,32),M.fabricRed);c.scale.set(1.05,1,1.05);c.position.y=0.42;g.add(c);
+      return g;};
+    // ---- SEATING LOUNGE (front-left): Andalusian banquette + 2 jamuga chairs + brass/marble coffee table
+    {const L=new THREE.Group();L.position.set(-2.5,0,4.0);scene.add(L);
+      add(L,box(2.0,0.32,0.62,M.macael),0,0.16,0.35);{const zf=sPlane(1.9,0.24,'zellige',0.24,{});zf.position.set(0,0.16,0.035);L.add(zf);}add(L,box(2.0,0.02,0.64,M.brass),0,0.33,0.35);
+      add(L,box(1.94,0.14,0.56,M.fabricRed),0,0.41,0.33);
+      add(L,box(2.0,0.55,0.14,M.walnut),0,0.6,0.62);
+      for(const x of [-0.62,0,0.62]){const c=box(0.56,0.4,0.14,M.fabricRed);c.position.set(x,0.68,0.5);c.rotation.x=-0.18;L.add(c);}
+      for(const x of [-1.04,1.04])add(L,box(0.1,0.6,0.62,M.walnut),x,0.3,0.35);
+      add(L,mesh(new THREE.CylinderGeometry(0.42,0.42,0.03,40),M.macael),0,0.42,-0.75);add(L,mesh(new THREE.CylinderGeometry(0.43,0.43,0.012,40),M.brass),0,0.4,-0.75);
+      add(L,mesh(new THREE.CylinderGeometry(0.12,0.2,0.4,24),M.brass),0,0.2,-0.75);
+      const tray=mesh(new THREE.CylinderGeometry(0.16,0.16,0.015,24),M.brass);tray.position.set(0.1,0.445,-0.75);L.add(tray);
+      for(const [x,a] of [[-0.75,0.5],[0.75,-0.5]]){const ch=modChair();ch.position.set(x,0,-1.55);ch.rotation.y=a;L.add(ch);}
+      const rug=mesh(new THREE.CylinderGeometry(1.25,1.25,0.008,48),new THREE.MeshStandardMaterial({color:0x7a2a24,roughness:0.95}));rug.scale.z=0.75;rug.position.set(0,0.004,-0.6);L.add(rug);}
+    for(const z of [-2.3,-3.3]){const c=modChair();c.position.set(2.45,0,z);c.rotation.y=-Math.PI/2;scene.add(c);}
+    {const Mg=new THREE.Group();Mg.position.set(4.82,0,-0.4);Mg.rotation.set(-0.08,-Math.PI/2,0,'YXZ');scene.add(Mg);
+      const c=document.createElement('canvas');c.width=400;c.height=760;const x=c.getContext('2d');
+      x.fillStyle='#7a1f22';x.fillRect(0,0,400,760);x.fillStyle='#c98a3a';x.fillRect(14,14,372,732);x.fillStyle='#8f2a26';x.fillRect(24,24,352,712);
+      for(let i=0;i<180;i++){x.fillStyle=['#d9a85a','#1f3a5a','#efe2c4','#5a1a1a','#c9763a'][i%5];const px=30+Math.random()*340,py=30+Math.random()*700;x.beginPath();x.arc(px,py,3+Math.random()*7,0,7);x.fill();}
+      x.fillStyle='#1f2f4a';x.fillRect(64,64,272,632);x.globalCompositeOperation='destination-out';
+      x.beginPath();x.moveTo(110,80);x.lineTo(290,80);x.quadraticCurveTo(300,130,320,140);x.lineTo(320,620);x.quadraticCurveTo(300,630,290,680);x.lineTo(110,680);x.quadraticCurveTo(100,630,80,620);x.lineTo(80,140);x.quadraticCurveTo(100,130,110,80);x.closePath();x.fill();
+      const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;
+      const mirror=mesh(new THREE.PlaneGeometry(0.8,2.02),new THREE.MeshStandardMaterial({color:0xdfe6e8,metalness:1,roughness:0.04}));mirror.position.set(0,1.17,0.008);Mg.add(mirror);
+      const fr=mesh(new THREE.PlaneGeometry(1.1,2.3),new THREE.MeshStandardMaterial({map:t,transparent:true,alphaTest:0.5,roughness:0.95}));fr.position.set(0,1.17,0.016);Mg.add(fr);
+      add(Mg,box(1.1,0.04,0.02,new THREE.MeshStandardMaterial({color:0xefe6d4})),0,2.33,0.016);add(Mg,box(1.1,0.04,0.02,new THREE.MeshStandardMaterial({color:0xefe6d4})),0,0.01,0.016);}
+    // ---- MANNEQUINS on brass-ringed plinths
+    const manq=(x,z,ry,col)=>{const g2=new THREE.Group();g2.position.set(x,0,z);g2.rotation.y=ry;scene.add(g2);
+      add(g2,mesh(new THREE.CylinderGeometry(0.34,0.34,0.14,40),new THREE.MeshStandardMaterial({color:0xefe9df,roughness:0.35})),0,0.07,0);add(g2,mesh(new THREE.TorusGeometry(0.34,0.008,6,40),M.brass),0,0.14,0).rotation.x=Math.PI/2;
+      add(g2,mesh(new THREE.CylinderGeometry(0.012,0.012,0.5,8),M.brass),0,0.39,0);
+      const pr=[[0,0],[0.42,0],[0.3,0.6],[0.2,1.0],[0.16,1.08],[0.22,1.15],[0.2,1.3],[0.12,1.38],[0.05,1.42],[0,1.42]].map(q=>new THREE.Vector2(q[0],q[1]));
+      const dr=mesh(new THREE.LatheGeometry(pr,32),new THREE.MeshStandardMaterial({color:col,roughness:0.85}));dr.scale.set(1,1,0.7);dr.position.y=0.25;g2.add(dr);
+      add(g2,mesh(new THREE.CylinderGeometry(0.045,0.05,0.1,12),new THREE.MeshStandardMaterial({color:0xe8dccb,roughness:0.5})),0,1.72,0);
+      const hd=mesh(new THREE.SphereGeometry(0.1,20,16),new THREE.MeshStandardMaterial({color:0xe8dccb,roughness:0.5}));hd.scale.set(0.85,1.1,0.9);hd.position.y=1.88;g2.add(hd);hd.scale.set(0.6,0.5,0.6);hd.position.y=1.8;
+      const drape=mesh(new THREE.CylinderGeometry(0.11,0.27,0.36,28),new THREE.MeshStandardMaterial({color:col,roughness:0.85}));drape.position.y=1.66;
+      const trim=mesh(new THREE.TorusGeometry(0.3,0.008,6,40),M.brass);trim.rotation.x=Math.PI/2;trim.position.y=0.3;g2.add(trim);};
+    manq(-1.75,-2.0,0.5,0x1f5a4a);manq(1.1,-2.7,-0.4,0xc9a45a);
+    // ---- FREESTANDING BRASS GARMENT STAND (right)
+    if(false){const R2=new THREE.Group();R2.position.set(2.7,0,0.3);scene.add(R2);
+      for(const z of [-0.75,0.75]){add(R2,mesh(new THREE.CylinderGeometry(0.014,0.014,1.65,8),M.brass),0,0.825+0.02,z);add(R2,box(0.42,0.03,0.05,M.brass),0,0.02,z);}
+      const bar=mesh(new THREE.CylinderGeometry(0.014,0.014,1.5,8),M.brass);bar.rotation.x=Math.PI/2;bar.position.y=1.65;R2.add(bar);
+      add(R2,box(0.4,0.025,1.5,M.walnut),0,0.3,0);
+      for(let k=0;k<8;k++){const c=KF((k+2)%8);add(R2,box(0.42,0.85,0.05,c),0,1.18,-0.62+k*0.177);}
+      for(let k=0;k<3;k++)add(R2,box(0.3,0.1,0.22,KF((k+5)%8)),0,0.37,-0.45+k*0.45);}
     for(const [x,z] of [[-4.3,5.3],[4.3,5.3],[-1.9,-5.4]]){const p=plant(2.0);p.position.set(x,0,z);p.scale.setScalar(0.85);scene.add(p);}}
   // ---- CEDAR CEILING: coffered grid 8 x 8 bays (1250 x 1500), main beams 200x300, secondary 140x220, central muqarnas cupola
   {const C=ceilingGroup;const BX=1.25,BZ=1.5;const ox0=-1.25,ox1=1.25,oz0=-1.5,oz1=1.5;
@@ -1158,6 +1224,7 @@ const SHOTS=[
   {id:'s2',ku:'دیواری جلەکان',en:'Clothing niches',mm:20,p:[2.6,1.7,5.0],t:[-5,1.5,-0.6],what:''},
   {id:'s3',ku:'کاشێر و ژووری گۆڕین',en:'Cashier + fitting',mm:18,p:[-3.6,1.7,3.6],t:[2.4,1.5,-5.0],what:''},
   {id:'s4',ku:'سەقفی دار',en:'Cedar ceiling',mm:15,p:[0.3,1.5,4.6],t:[0,4.6,-1.2],what:''},
+  {id:'s6',ku:'گۆشەی دانیشتن',en:'Seating lounge',mm:18,p:[1.4,1.65,0.9],t:[-3.6,1.0,4.8],what:''},
   {id:'s5',ku:'دەروازە',en:'Entrance',mm:18,p:[-1.6,1.7,-2.6],t:[1.2,1.5,6],what:''},
 ];
 const camsEl=document.getElementById('cams');const shotName=document.getElementById('shotName');
